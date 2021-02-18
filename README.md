@@ -1,2 +1,2 @@
 # ProductAPI
-Rest API implemented using Flask and SQLAlchemy
+Rest API implemented using Flask and mongoengine
