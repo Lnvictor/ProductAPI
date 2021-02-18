@@ -1,8 +1,15 @@
 from models import Product
-from product_api.base import conn
+from base import conn
 
 
-# TODO: implement controller methods
+class ProductDoesNotExistsException(Exception):
+    """
+    Exception raised when a query for a given product
+    doesn't has a successfully result
+    """
+    pass
+
+
 class ProductController:
     """
     Product Controller is the responsible
@@ -24,31 +31,60 @@ class ProductController:
         :return: The instance created
         """
 
-        pass
+        p = Product(name=name, desc=desc, value=value)
+        p.save()
+        return p
 
     def get_by_name(self, name: str) -> Product:
         """
+        returns Product instance given the name
 
-        :param name:
-        :return:
+        :param name: str
+        :return: Product
         """
-        pass
+        p = Product.objects(name=name).first()
+        if p is None:
+            raise ProductDoesNotExistsException()
+        return p
 
-    def change(self, **kwargs) -> bool:
+    def change(self, p_name: str, **kwargs) -> Product:
+        """
+        Update
+
+        :param id: primary key for Product obj
+        :param kwargs: optional Product fields to be updated
+
+        :return: Product instance
+        """
+        for key in kwargs:
+            value = kwargs[key]
+            product = Product.objects(name=p_name).first()
+
+            if key == "name" and value is not None:
+                product.name = value
+            elif key == "desc" and value is not None:
+                product.desc = value
+            elif key == "value" and value is not None:
+                product.value = float(value)
+
+            product.save()
+            return product
+
+    def get(self):
+        """
+        get all products
+
+        :return: list
         """
 
-        :param kwargs:
-        :return:
-        """
-        pass
+        return list(Product.objects.all())
 
-    def delete_by_name(self, name: str) -> bool:
-        """
-
-        :param name:
-        :return:
-        """
-        pass
+    def delete_by_name(self, name: str) -> Product:
+        p = Product.objects(name=name).first()
+        if p is None:
+            raise ProductDoesNotExistsException()
+        p.delete()
+        return p
 
 
 # Singleton
