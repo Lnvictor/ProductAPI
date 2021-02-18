@@ -7,6 +7,7 @@ class ProductDoesNotExistsException(Exception):
     Exception raised when a query for a given product
     doesn't has a successfully result
     """
+
     pass
 
 

@@ -7,8 +7,4 @@ class Product(Document):
     value = FloatField()
 
     def serialize(self):
-        return {
-            "name": self.name,
-            "description": self.desc,
-            "value": self.value
-        }
+        return {"name": self.name, "description": self.desc, "value": self.value}
